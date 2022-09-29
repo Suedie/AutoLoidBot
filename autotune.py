@@ -25,10 +25,10 @@ def autotune(base, over, filename, strength = 75, executableName = "./autotune.e
 
 randDigits = lambda: str(random.random()).replace('.', '') 
 
-def autotuneURL(filename, URL, replaceOriginal = True, video = True, executableName = "./autotune.exe"):
+def autotuneURL(filename, URL, skip = None, replaceOriginal = True, video = True, executableName = "./autotune.exe"):
 	directory = path.split(path.abspath(filename))[0]
 	downloadName = f"{directory}/download_{randDigits()}.wav"
-	result = download(downloadName, URL, video = False, duration = 2 * 60)
+	result = download(downloadName, URL, skip, video = False, duration = 2 * 60)
 	if result:
 		wavName = f'{directory}/vidAudio_{randDigits()}.wav'
 		if video:

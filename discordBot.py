@@ -36,8 +36,11 @@ async def on_message(message):
 	if message.content.strip().lower() == "autotune help":
 		await message.channel.send("""Bot usage:
 	Autotune <link or search query> - Autotune a video (attached, replied to, or recent in channel) to another video.""")
-	elif (s := message.content.strip().lower()).startswith("autotune"):
+	elif (message.content.strip().lower()).startswith("autotune"):
 		attach = None
+		skip = None
+		if len(var := message.content.strip.split(" ")) > 1:
+			skip = var[1];
 		if len(message.attachments) > 0:
 			attach = message.attachments[0]
 		elif message.reference and len(tmpDat := (await message.channel.fetch_message(message.reference.message_id)).attachments) > 0:
@@ -53,7 +56,7 @@ async def on_message(message):
 					fileName = dr + '/discord_' + str(random.random()) + attach.filename
 					await attach.save(fileName)
 					loop = asyncio.get_event_loop()
-					result = await loop.run_in_executor(ThreadPoolExecutor(), autotuneURL, fileName, spl[1])
+					result = await loop.run_in_executor(ThreadPoolExecutor(), autotuneURL, fileName, spl[1], skip)
 					if type(result) == str:
 						try:
 							await message.channel.send("Autotuning go ETH! 0x013d1361177ab72b0cf096bd34fa671efb3eeeee", file = discord.File(result))
